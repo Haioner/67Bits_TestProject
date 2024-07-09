@@ -17,7 +17,7 @@ public class AttackController : MonoBehaviour
         if (other.CompareTag("NPC"))
         {
             NPCController npcController = other.GetComponent<NPCController>();
-            if (npcController != null)
+            if (npcController != null && stackingManager.AvailableStack())
             {
                 stackingManager.AddNPCToStack(npcController);
 

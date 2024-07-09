@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class StackingManager : MonoBehaviour
@@ -9,9 +9,10 @@ public class StackingManager : MonoBehaviour
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float maxTiltAngle = 15f;
 
-    private Stack<NPCController> npcStackList = new Stack<NPCController>();
-    private int stackCount = 0;
     private Vector3 lastPosition;
+    private List<NPCController> npcStackList = new List<NPCController>();
+    private int stackCount;
+    private int maxStackCount = 3;
 
     void Start()
     {
@@ -24,60 +25,87 @@ public class StackingManager : MonoBehaviour
         lastPosition = stackPos.position;
 
         CalculateNPCRotation(movementDirection);
+
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.F))
+            AddMaxStack();
+
+        if (Input.GetKeyDown(KeyCode.G))
+            RemoveNPCFromStack();
+#endif
     }
 
-    public void AddNPCToStack(NPCController nPCController)
+    public bool AvailableStack()
     {
-        StartCoroutine(MoveNPCToStack(nPCController, stackCount));
+        return npcStackList.Count < maxStackCount;
+    }
+
+    public void AddMaxStack()
+    {
+        maxStackCount++;
+        Debug.Log(maxStackCount);
     }
 
     public void RemoveNPCFromStack()
     {
         if (npcStackList.Count > 0)
         {
-            NPCController removedNPC = npcStackList.Pop();
-            removedNPC.ResetToStack();
+            Destroy(npcStackList[npcStackList.Count - 1].gameObject);
+            npcStackList.RemoveAt(npcStackList.Count - 1);
             stackCount--;
         }
+    }
+
+    public void AddNPCToStack(NPCController nPCController)
+    {
+        npcStackList.Add(nPCController);
+        stackCount++;
+        StartCoroutine(MoveNPCToStack(nPCController, stackCount));
     }
 
     private IEnumerator MoveNPCToStack(NPCController nPCController, int index)
     {
         yield return new WaitForSeconds(1f);
-        npcStackList.Push(nPCController);
-        stackCount++;
 
-        if (stackCount > 1)
+        if(nPCController != null)
         {
-            NPCController previousNPC = npcStackList.ToArray()[1];
-            nPCController.transform.SetParent(previousNPC.transform);
-        }
-        else
-        {
-            nPCController.transform.SetParent(stackPos);
+            if (index > 1)
+            {
+                NPCController previousNPC = npcStackList[index - 2];
+                nPCController.transform.SetParent(previousNPC.transform);
+            }
+            else
+            {
+                nPCController.transform.SetParent(stackPos);
+            }
+
+            nPCController.ResetToStack();
+            nPCController.transform.localPosition = Vector3.up * stackOffset;
         }
 
-        nPCController.ResetToStack();
-        nPCController.transform.localPosition = Vector3.up * stackOffset;
     }
 
     private void CalculateNPCRotation(Vector3 movementDirection)
     {
+        float speed = movementDirection.magnitude / Time.deltaTime; //Calculate speed
+
         int index = 0;
         foreach (NPCController npc in npcStackList)
         {
-            //Converts the move direction to local space on stack
+            //Convert movement direction locally relative to the stack
             Vector3 localMovementDirection = stackPos.InverseTransformDirection(movementDirection).normalized;
-            float tiltFactor = Mathf.Lerp(0, maxTiltAngle, (float)(index + 1) / stackCount);
 
-            //Calculate the invert rotation of stack movement
+            //Calculate tilt based on speed
+            float tiltFactor = Mathf.Lerp(0, maxTiltAngle, speed / rotationSpeed);
+
+            //Calculate target rotation based on local movement direction and tilt factor
             Vector3 targetRotation = -Vector3.Cross(Vector3.up, localMovementDirection) * tiltFactor;
 
-            //Sin tilts
+            //Apply oscillation to add movement effect
             float oscillation = Mathf.Sin(Time.time * rotationSpeed + index) * tiltFactor * 0.5f;
             Vector3 finalRotation = targetRotation + new Vector3(0, 0, oscillation);
 
-            //Apply rotation
+            //Apply rotation using Slerp to smooth the movement
             npc.transform.localRotation = Quaternion.Slerp(npc.transform.localRotation, Quaternion.Euler(finalRotation), Time.deltaTime * rotationSpeed);
 
             index++;
