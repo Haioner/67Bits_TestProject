@@ -9,6 +9,7 @@ public class ScalePunch : MonoBehaviour
 
     private Vector3 _originalScale;
     private Coroutine _punchCoroutine;
+    private bool _canPunchDestroy;
 
     private void Start()
     {
@@ -23,12 +24,18 @@ public class ScalePunch : MonoBehaviour
         _punchCoroutine = StartCoroutine(PunchCoroutine());
     }
 
+    public void DoPunch(bool canDestroy)
+    {
+        _canPunchDestroy = true;
+        DoPunch();
+    }
+
     private IEnumerator PunchCoroutine()
     {
         transform.localScale = punchScale;
         yield return new WaitForSeconds(punchDuration);
 
-        //fade-out
+        //Fade out
         float timer = 0f;
         while (timer < fadeDuration)
         {
@@ -39,5 +46,8 @@ public class ScalePunch : MonoBehaviour
             yield return null;
         }
         transform.localScale = _originalScale;
+
+        if (_canPunchDestroy)
+            Destroy(transform.parent.gameObject);
     }
 }

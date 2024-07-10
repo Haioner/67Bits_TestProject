@@ -5,9 +5,10 @@ public class PlayerAnimations : MonoBehaviour
 {
     [SerializeField] private Animator _anim;
     [SerializeField] private float smoothMoveAnimation = 0.1f;
-    private float currentSpeed;
-    private float targetSpeed;
-    private float speedSmoothVelocity;
+
+    private float _speedSmoothVelocity;
+    private float _currentSpeed;
+    private float _targetSpeed;
 
     private void OnEnable()
     {
@@ -21,7 +22,7 @@ public class PlayerAnimations : MonoBehaviour
         AttackController.OnAttack -= AttackTrigger;
     }
 
-    private void UpdateSpeed(float speed) { targetSpeed = speed; }
+    private void UpdateSpeed(float speed) { _targetSpeed = speed; }
 
     private void Update()
     {
@@ -30,8 +31,8 @@ public class PlayerAnimations : MonoBehaviour
 
     private void CalculateSpeedAnimation()
     {
-        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, smoothMoveAnimation);
-        _anim.SetFloat("Speed", currentSpeed);
+        _currentSpeed = Mathf.SmoothDamp(_currentSpeed, _targetSpeed, ref _speedSmoothVelocity, smoothMoveAnimation);
+        _anim.SetFloat("Speed", _currentSpeed);
     }
 
     private void AttackTrigger(object sender, EventArgs e)

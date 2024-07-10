@@ -2,31 +2,31 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    private static AudioSource m_AudioSource;
+    private static AudioSource _audioSource;
 
     private void Awake()
     {
-        m_AudioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public static void PlayAudioClip(AudioClip clip)
     {
-        m_AudioSource.volume = 1f;
-        m_AudioSource.pitch = 1f;
-        m_AudioSource.PlayOneShot(clip);
+        _audioSource.volume = 1f;
+        _audioSource.pitch = 1f;
+        _audioSource.PlayOneShot(clip);
     }
 
     public static void PlayAudioClipPitch(AudioClip clip, float pitch)
     {
-        m_AudioSource.volume = 1f;
-        m_AudioSource.pitch = pitch;
-        m_AudioSource.PlayOneShot(clip);
+        _audioSource.volume = 1f;
+        _audioSource.pitch = pitch;
+        _audioSource.PlayOneShot(clip);
     }
 
     public static void PlayAudioClipVolume(AudioClip clip, float volume)
     {
-        m_AudioSource.volume = volume;
-        m_AudioSource.pitch = 1f;
-        m_AudioSource.PlayOneShot(clip);
+        _audioSource.volume = volume;
+        _audioSource.pitch = 1f;
+        _audioSource.PlayOneShot(clip);
     }
 }

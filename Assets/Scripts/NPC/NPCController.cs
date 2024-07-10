@@ -3,31 +3,44 @@ using UnityEngine;
 public class NPCController : MonoBehaviour
 {
     [Header("Ragdoll")]
-    [SerializeField] private float knockbackForce = 10f;
+    [SerializeField] private float knockbackForce = 40f;
     [SerializeField] private ParticleSystem hitParticle;
 
     [Header("CACHE")]
-    [SerializeField] private CapsuleCollider capsuleCollider;
-    [SerializeField] private Animator _anim;
+    [SerializeField] private ScalePunch scalePunch;
+    [SerializeField] private Animator anim;
     [SerializeField] Transform hipsTransform;
-    [SerializeField] private Rigidbody rb;
+    [SerializeField] private Rigidbody hipsRB;
+
+    private CapsuleCollider _capsuleCollider;
+
+    private void Start()
+    {
+        _capsuleCollider = GetComponent<CapsuleCollider>();
+    }
 
     public void TakePunch(Vector3 knockbackDirection)
     {
-        rb.isKinematic = false;
-        rb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
+        hipsRB.isKinematic = false;
+        hipsRB.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
 
-        _anim.enabled = false;
-        capsuleCollider.enabled = false;
+        anim.enabled = false;
+        _capsuleCollider.enabled = false;
         SpawnHitParticle();
     }
 
-    public void ResetToStack()
+    public void ScalePunchDestroy()
     {
-        rb.isKinematic = true;
+        scalePunch.DoPunch(true);
+    }
+
+    public void ResetPosRot()
+    {
+        hipsRB.isKinematic = true;
         hipsTransform.localPosition = Vector3.zero;
         Quaternion newRotation = Quaternion.identity;
         hipsTransform.localRotation = newRotation;
+        scalePunch.DoPunch();
     }
 
     private void SpawnHitParticle()

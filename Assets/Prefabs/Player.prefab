@@ -2286,6 +2286,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2856909839502759344}
   - component: {fileID: 1335912216868577161}
+  - component: {fileID: 2524966403761980185}
+  - component: {fileID: 3832930276462751955}
   - component: {fileID: 6368260076631492773}
   - component: {fileID: 6506799967126790863}
   - component: {fileID: 2735903628788657377}
@@ -2293,7 +2295,7 @@ GameObject:
   - component: {fileID: 7040911006090500706}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2342,6 +2344,33 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &2524966403761980185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343042893038045018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c0704adfcbf7ec419fd0b06dac38ffe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxXP: 100
+  maxXPMultiplier: 1.225
+--- !u!114 &3832930276462751955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343042893038045018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f51eb3626848d4ebc8757f401ae706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gfxRenderer: {fileID: 4914025974340322380}
 --- !u!114 &6368260076631492773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2383,7 +2412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061ec1f211a758c4892508faa4c946ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockbackForce: 10
   stackingManager: {fileID: 2551798482464694595}
 --- !u!114 &2551798482464694595
 MonoBehaviour:
@@ -2398,10 +2426,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stackPos: {fileID: 8510375256954118349}
-  stackOffset: 0.9
+  stackOffset: 1
   rotationSpeed: 5
   maxTiltAngle: 10
-  tiltSpeed: 2
 --- !u!114 &7040911006090500706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3186,7 +3213,7 @@ Transform:
   m_GameObject: {fileID: 9018125473769044268}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.86, z: -0.422}
+  m_LocalPosition: {x: 0, y: 0.911, z: -0.422}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

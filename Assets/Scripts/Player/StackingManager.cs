@@ -9,69 +9,70 @@ public class StackingManager : MonoBehaviour
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float maxTiltAngle = 15f;
 
-    private Vector3 lastPosition;
-    private List<NPCController> npcStackList = new List<NPCController>();
-    private int stackCount;
-    private int maxStackCount = 3;
+    private List<NPCController> _npcStackList = new List<NPCController>();
+    private Vector3 _lastPosition;
+    private int _maxStackCount = 3;
+    private int _stackCount;
 
-    void Start()
+    //Invoke stack change
+    public delegate void OnStackChange(int stackCount, int maxStackCount);
+    public static event OnStackChange onStackChange;
+
+    private void Start()
     {
-        lastPosition = stackPos.position;
+        _lastPosition = stackPos.position;
+        onStackChange?.Invoke(_stackCount, _maxStackCount);
     }
 
-    void Update()
+    private void Update()
     {
-        Vector3 movementDirection = stackPos.position - lastPosition;
-        lastPosition = stackPos.position;
+        Vector3 movementDirection = stackPos.position - _lastPosition;
+        _lastPosition = stackPos.position;
 
         CalculateNPCRotation(movementDirection);
-
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.F))
-            AddMaxStack();
-
-        if (Input.GetKeyDown(KeyCode.G))
-            RemoveNPCFromStack();
-#endif
     }
 
     public bool AvailableStack()
     {
-        return npcStackList.Count < maxStackCount;
+        return _npcStackList.Count < _maxStackCount;
     }
+
+    public bool HasStackCount() {  return _stackCount > 0; }
 
     public void AddMaxStack()
     {
-        maxStackCount++;
-        Debug.Log(maxStackCount);
+        _maxStackCount++;
+        onStackChange?.Invoke(_stackCount, _maxStackCount);
     }
 
     public void RemoveNPCFromStack()
     {
-        if (npcStackList.Count > 0)
+        if (_npcStackList.Count > 0)
         {
-            Destroy(npcStackList[npcStackList.Count - 1].gameObject);
-            npcStackList.RemoveAt(npcStackList.Count - 1);
-            stackCount--;
+            _npcStackList[_npcStackList.Count - 1].ScalePunchDestroy();
+            _npcStackList.RemoveAt(_npcStackList.Count - 1);
+            _stackCount--;
+            onStackChange?.Invoke(_stackCount, _maxStackCount);
         }
     }
 
     public void AddNPCToStack(NPCController nPCController)
     {
-        npcStackList.Add(nPCController);
-        stackCount++;
-        StartCoroutine(MoveNPCToStack(nPCController, stackCount));
+        _npcStackList.Add(nPCController);
+        _stackCount++;
+        StartCoroutine(MoveNPCToStack(nPCController, _stackCount));
+        onStackChange?.Invoke(_stackCount, _maxStackCount);
     }
 
     private IEnumerator MoveNPCToStack(NPCController nPCController, int index)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.7f);
 
         if(nPCController != null)
         {
             if (index > 1)
             {
-                NPCController previousNPC = npcStackList[index - 2];
+                NPCController previousNPC = _npcStackList[index - 2];
                 nPCController.transform.SetParent(previousNPC.transform);
             }
             else
@@ -79,7 +80,7 @@ public class StackingManager : MonoBehaviour
                 nPCController.transform.SetParent(stackPos);
             }
 
-            nPCController.ResetToStack();
+            nPCController.ResetPosRot();
             nPCController.transform.localPosition = Vector3.up * stackOffset;
         }
 
@@ -87,21 +88,17 @@ public class StackingManager : MonoBehaviour
 
     private void CalculateNPCRotation(Vector3 movementDirection)
     {
-        float speed = movementDirection.magnitude / Time.deltaTime; //Calculate speed
+        float speed = movementDirection.magnitude / Time.deltaTime;
 
         int index = 0;
-        foreach (NPCController npc in npcStackList)
+        foreach (NPCController npc in _npcStackList)
         {
-            //Convert movement direction locally relative to the stack
             Vector3 localMovementDirection = stackPos.InverseTransformDirection(movementDirection).normalized;
 
             //Calculate tilt based on speed
             float tiltFactor = Mathf.Lerp(0, maxTiltAngle, speed / rotationSpeed);
 
-            //Calculate target rotation based on local movement direction and tilt factor
             Vector3 targetRotation = -Vector3.Cross(Vector3.up, localMovementDirection) * tiltFactor;
-
-            //Apply oscillation to add movement effect
             float oscillation = Mathf.Sin(Time.time * rotationSpeed + index) * tiltFactor * 0.5f;
             Vector3 finalRotation = targetRotation + new Vector3(0, 0, oscillation);
 
