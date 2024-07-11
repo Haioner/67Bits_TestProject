@@ -2,31 +2,34 @@ using UnityEngine;
 
 public class NPCController : MonoBehaviour
 {
-    [Header("Ragdoll")]
-    [SerializeField] private float knockbackForce = 40f;
-    [SerializeField] private ParticleSystem hitParticle;
-
     [Header("CACHE")]
     [SerializeField] private ScalePunch scalePunch;
     [SerializeField] private Animator anim;
     [SerializeField] Transform hipsTransform;
     [SerializeField] private Rigidbody hipsRB;
 
-    private CapsuleCollider _capsuleCollider;
+    private NPCAttack _npcAttack;
 
-    private void Start()
+    private void OnEnable()
     {
-        _capsuleCollider = GetComponent<CapsuleCollider>();
+        if(TryGetComponent(out NPCAttack npcAttack))
+        {
+            _npcAttack = npcAttack;
+            _npcAttack.OnNPCAttack += AttackAnim;
+        }
     }
 
-    public void TakePunch(Vector3 knockbackDirection)
+    private void OnDisable()
     {
-        hipsRB.isKinematic = false;
-        hipsRB.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
+        if(_npcAttack != null)
+        {
+            _npcAttack.OnNPCAttack -= AttackAnim;
+        }
+    }
 
-        anim.enabled = false;
-        _capsuleCollider.enabled = false;
-        SpawnHitParticle();
+    public void AttackAnim(object sender, System.EventArgs e)
+    {
+        anim.SetTrigger("Attack");
     }
 
     public void ScalePunchDestroy()
@@ -43,10 +46,9 @@ public class NPCController : MonoBehaviour
         scalePunch.DoPunch();
     }
 
-    private void SpawnHitParticle()
+    public void RemoveParentAndKinematic()
     {
-        Vector3 spawnPos = transform.position;
-        spawnPos.y += 1f;
-        Instantiate(hitParticle, spawnPos, Quaternion.identity);
+        hipsRB.isKinematic = false;
+        transform.SetParent(null);
     }
 }

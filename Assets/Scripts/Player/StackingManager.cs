@@ -56,6 +56,14 @@ public class StackingManager : MonoBehaviour
         }
     }
 
+    public void ResetStack()
+    {
+        foreach (NPCController npc in _npcStackList)
+        {
+            npc.RemoveParentAndKinematic();
+        }
+    }
+
     public void AddNPCToStack(NPCController nPCController)
     {
         _npcStackList.Add(nPCController);

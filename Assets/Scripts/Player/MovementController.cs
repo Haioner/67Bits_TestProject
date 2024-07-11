@@ -5,6 +5,7 @@ using UnityEngine;
 public class MovementController : MonoBehaviour
 {
     [Header("Movement")]
+    public bool CanMove = true;
     [SerializeField] private float speed = 5f;
     [SerializeField] private float rotationSpeed = 7f;
 
@@ -28,6 +29,8 @@ public class MovementController : MonoBehaviour
 
     private void Update()
     {
+        if (!CanMove) return;
+
         CalculateMovement();
         CalculateRotation();
     }

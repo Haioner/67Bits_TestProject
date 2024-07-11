@@ -13,13 +13,13 @@ public class PlayerAnimations : MonoBehaviour
     private void OnEnable()
     {
         MovementController.onSpeedChange += UpdateSpeed;
-        AttackController.OnAttack += AttackTrigger;
+        PlayerAttack.OnPlayerAttack += AttackTrigger;
     }
 
     private void OnDisable()
     {
         MovementController.onSpeedChange -= UpdateSpeed;
-        AttackController.OnAttack -= AttackTrigger;
+        PlayerAttack.OnPlayerAttack -= AttackTrigger;
     }
 
     private void UpdateSpeed(float speed) { _targetSpeed = speed; }
