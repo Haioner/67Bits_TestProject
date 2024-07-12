@@ -1982,7 +1982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9968ccdc678394bb7490737f4b70a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  punchScale: {x: 2, y: 2, z: 2}
+  punchScale: {x: 1.5, y: 1.5, z: 1.5}
   punchDuration: 0.1
   fadeDuration: 0.1
 --- !u!1 &6288169008414077967

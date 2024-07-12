@@ -8,6 +8,7 @@ public class ItemShop : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private ParticleSystem buyParticle;
 
     [Header("Item")]
     [SerializeField] private float initialPrice;
@@ -81,6 +82,11 @@ public class ItemShop : MonoBehaviour
         else
             priceText.color = Color.red;
 
-        priceText.text = CurrentPrice.ToString("F0");
+        priceText.text = CurrentPrice.ToString("F0") + "<sprite=0>";
+    }
+
+    public void SpawnBuyParticle(Transform buttonTransform)
+    {
+        Instantiate(buyParticle, buttonTransform);
     }
 }

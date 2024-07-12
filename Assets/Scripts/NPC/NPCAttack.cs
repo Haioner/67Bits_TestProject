@@ -10,6 +10,7 @@ public class NPCAttack : AttackController
         GetComponent<NPCMovement>().DisableMovement();
         other.GetComponent<PlayerMovement>().CanMove = false;
         other.GetComponent<StackingManager>().ResetStack();
+        FindFirstObjectByType<PlayerCanvas>().BustedCanvas();
         OnNPCAttack?.Invoke(this, System.EventArgs.Empty);
     }
 }

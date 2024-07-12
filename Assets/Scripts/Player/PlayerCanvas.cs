@@ -5,8 +5,9 @@ using TMPro;
 public class PlayerCanvas : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI stackText;
-    [SerializeField] private TextMeshProUGUI coinText;
+    [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private CanvasGroup shopCanvasGroup;
+    [SerializeField] private GameObject bustedHolder;
 
     [Header("Player Level")]
     [SerializeField] private TextMeshProUGUI levelText;
@@ -14,6 +15,9 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] private float progressSpeed = 4.2f;
     private float _currentXP;
     private float _currentmaxXP;
+
+    [Header("Particles")]
+    [SerializeField] private ParticleSystem levelUpParticle;
 
     private void OnEnable()
     {
@@ -40,10 +44,27 @@ public class PlayerCanvas : MonoBehaviour
         UpdateXPSlider();
     }
 
+    public void SwitchShopCanvas()
+    {
+        if (shopCanvasGroup.alpha == 1) //On to Off
+        {
+            shopCanvasGroup.alpha = 0;
+            shopCanvasGroup.interactable = false;
+            shopCanvasGroup.blocksRaycasts = false;
+        }
+        else //Off to On
+        {
+            shopCanvasGroup.alpha = 1;
+            shopCanvasGroup.interactable = true;
+            shopCanvasGroup.blocksRaycasts = true;
+        }
+    }
+
     #region Level
     private void UpdateLevelText(int levelValue)
     {
         levelText.text = "Level:" + levelValue.ToString();
+        SpawnLevelUpParticle();
     }
 
     private void UpdateXPValue(float currentXP, float maxXPValue)
@@ -63,11 +84,16 @@ public class PlayerCanvas : MonoBehaviour
     {
         return progressSpeed * (_currentmaxXP / 5) * Time.deltaTime;
     }
+
+    private void SpawnLevelUpParticle()
+    {
+        Instantiate(levelUpParticle, transform);
+    }
     #endregion
 
     private void UpdateCoinsText(float coinsValue)
     {
-        coinText.text = coinsValue.ToString("F0");
+        moneyText.text = coinsValue.ToString("F0");
     }
 
     private void UpdateStackText(int stack, int maxStack)
@@ -75,19 +101,13 @@ public class PlayerCanvas : MonoBehaviour
         stackText.text = stack.ToString() + "/" + maxStack.ToString();
     }
 
-    public void SwitchShopCanvas()
+    public void BustedCanvas()
     {
-        if(shopCanvasGroup.alpha == 1) //On to Off
-        {
-            shopCanvasGroup.alpha = 0;
-            shopCanvasGroup.interactable = false;
-            shopCanvasGroup.blocksRaycasts = false;
-        }
-        else //Off to On
-        {
-            shopCanvasGroup.alpha = 1;
-            shopCanvasGroup.interactable = true;
-            shopCanvasGroup.blocksRaycasts = true;
-        }
+        bustedHolder.SetActive(true);
+    }
+
+    public void RetryButton()
+    {
+        TransitionController.instance.TransitionToSceneName("GameScene");
     }
 }

@@ -69,6 +69,9 @@ public class StackingManager : MonoBehaviour
 
     public void AddNPCToStack(NPCController nPCController)
     {
+        //Prevent NPC Move
+        nPCController.GetComponent<NPCMovement>().enabled = false;
+
         _npcStackList.Add(nPCController);
         _stackCount++;
         StartCoroutine(MoveNPCToStack(nPCController, _stackCount));

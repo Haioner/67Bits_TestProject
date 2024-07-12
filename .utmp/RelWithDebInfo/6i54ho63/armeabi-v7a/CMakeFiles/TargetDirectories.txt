@@ -1,0 +1,5 @@
+D:/Projetos/UnityProjects/67Bits_TestProject/.utmp/RelWithDebInfo/6i54ho63/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Projetos/UnityProjects/67Bits_TestProject/.utmp/RelWithDebInfo/6i54ho63/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+D:/Projetos/UnityProjects/67Bits_TestProject/.utmp/RelWithDebInfo/6i54ho63/armeabi-v7a/FramePacing/CMakeFiles/swappywrapper.dir
+D:/Projetos/UnityProjects/67Bits_TestProject/.utmp/RelWithDebInfo/6i54ho63/armeabi-v7a/FramePacing/CMakeFiles/edit_cache.dir
+D:/Projetos/UnityProjects/67Bits_TestProject/.utmp/RelWithDebInfo/6i54ho63/armeabi-v7a/FramePacing/CMakeFiles/rebuild_cache.dir

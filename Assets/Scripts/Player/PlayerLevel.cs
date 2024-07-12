@@ -38,9 +38,9 @@ public class PlayerLevel : MonoBehaviour
             maxXP *= maxXPMultiplier;
             _currentXP = remainingXP;
             _stackingManager.AddMaxStack();
+            onLevelChanged?.Invoke(_level);
         }
 
         onXPChanged?.Invoke(_currentXP, maxXP);
-        onLevelChanged?.Invoke(_level);
     }
 }
