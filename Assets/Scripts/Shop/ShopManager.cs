@@ -18,6 +18,7 @@ public class ShopManager : MonoBehaviour
 
     private void OnEnable()
     {
+        Coins = 0;
         onSelectColorItem += SelectItem;
     }
 
@@ -29,8 +30,8 @@ public class ShopManager : MonoBehaviour
     private void Update()
     {
 #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.X))
-            AddCoins(100);
+        if (Input.GetKey(KeyCode.X))
+            AddCoins(99999);
 #endif
     }
 

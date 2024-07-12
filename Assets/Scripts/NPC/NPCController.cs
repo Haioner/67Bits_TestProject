@@ -43,6 +43,7 @@ public class NPCController : MonoBehaviour
         ragdollController.DisableRagdoll();
         transform.position = _initialPos;
         transform.rotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
 
         npcMovement.enabled = true;
         npcMovement.SetInitialRotation();
@@ -60,6 +61,7 @@ public class NPCController : MonoBehaviour
 
     public void MoveToStackPosRot()
     {
+        transform.localScale = Vector3.one;
         npcMovement.enabled = false;
         hipsRB.isKinematic = true;
         ragdollController.ResetHips();

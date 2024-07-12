@@ -13,6 +13,7 @@ public class StackingManager : MonoBehaviour
     private Vector3 _lastPosition;
     private int _maxStackCount = 3;
     private int _stackCount;
+    private float _initialMaxTiltAngle;
 
     //Invoke stack change
     public delegate void OnStackChange(int stackCount, int maxStackCount);
@@ -21,6 +22,7 @@ public class StackingManager : MonoBehaviour
     private void Start()
     {
         _lastPosition = stackPos.position;
+        _initialMaxTiltAngle = maxTiltAngle;
         onStackChange?.Invoke(_stackCount, _maxStackCount);
     }
 
@@ -54,6 +56,7 @@ public class StackingManager : MonoBehaviour
             _npcStackList[_npcStackList.Count - 1].SellNPC();
             _npcStackList.RemoveAt(_npcStackList.Count - 1);
             _stackCount--;
+            AdjustMaxTiltAngle();
             onStackChange?.Invoke(_stackCount, _maxStackCount);
         }
     }
@@ -74,8 +77,14 @@ public class StackingManager : MonoBehaviour
 
         _npcStackList.Add(nPCController);
         _stackCount++;
+        AdjustMaxTiltAngle();
         StartCoroutine(MoveNPCToStack(nPCController, _stackCount));
         onStackChange?.Invoke(_stackCount, _maxStackCount);
+    }
+
+    private void AdjustMaxTiltAngle()
+    {
+        maxTiltAngle = _initialMaxTiltAngle - (_stackCount / 5);
     }
 
     private IEnumerator MoveNPCToStack(NPCController nPCController, int index)
