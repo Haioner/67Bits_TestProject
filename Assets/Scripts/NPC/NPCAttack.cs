@@ -7,8 +7,8 @@ public class NPCAttack : AttackController
     public override void Attack(Collider other)
     {
         base.Attack(other);
-
-        other.GetComponent<MovementController>().CanMove = false;
+        GetComponent<NPCMovement>().DisableMovement();
+        other.GetComponent<PlayerMovement>().CanMove = false;
         other.GetComponent<StackingManager>().ResetStack();
         OnNPCAttack?.Invoke(this, System.EventArgs.Empty);
     }

@@ -9,7 +9,9 @@ public class ScalePunch : MonoBehaviour
 
     private Vector3 _originalScale;
     private Coroutine _punchCoroutine;
-    private bool _canPunchDestroy;
+
+    private bool _canPunchDeactive;
+    public event System.EventHandler OnDeactive;
 
     private void Start()
     {
@@ -24,9 +26,9 @@ public class ScalePunch : MonoBehaviour
         _punchCoroutine = StartCoroutine(PunchCoroutine());
     }
 
-    public void DoPunch(bool canDestroy)
+    public void DoPunch(bool canDeactive = false)
     {
-        _canPunchDestroy = true;
+        _canPunchDeactive = canDeactive;
         DoPunch();
     }
 
@@ -47,7 +49,10 @@ public class ScalePunch : MonoBehaviour
         }
         transform.localScale = _originalScale;
 
-        if (_canPunchDestroy)
-            Destroy(transform.parent.gameObject);
+        if (_canPunchDeactive)
+        {
+            _canPunchDeactive = false;
+            OnDeactive?.Invoke(this, System.EventArgs.Empty);
+        }
     }
 }

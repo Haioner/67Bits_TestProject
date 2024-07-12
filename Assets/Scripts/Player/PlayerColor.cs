@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerColor : MonoBehaviour
 {
-    [SerializeField] private Renderer gfxRenderer;
+    [SerializeField] private Renderer[] gfxRenderer;
 
     public static System.Action<Color> OnColorChange;
 
@@ -18,6 +18,9 @@ public class PlayerColor : MonoBehaviour
 
     private void ChangeColor(Color newColor)
     {
-        gfxRenderer.material.color = newColor;
+        foreach (var renderer in gfxRenderer)
+        {
+            renderer.material.color = newColor;
+        }
     }
 }

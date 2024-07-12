@@ -7,16 +7,24 @@ public class NPCController : MonoBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] Transform hipsTransform;
     [SerializeField] private Rigidbody hipsRB;
+    [SerializeField] private RagdollController ragdollController;
+    [SerializeField] private NPCMovement npcMovement;
 
     private NPCAttack _npcAttack;
+    private Vector3 _initialPos;
+    private CapsuleCollider _capsuleCollider;
 
     private void OnEnable()
     {
+        _capsuleCollider = GetComponent<CapsuleCollider>();
+        _initialPos = transform.position;
         if(TryGetComponent(out NPCAttack npcAttack))
         {
             _npcAttack = npcAttack;
             _npcAttack.OnNPCAttack += AttackAnim;
         }
+
+        scalePunch.OnDeactive += ResetNPC;
     }
 
     private void OnDisable()
@@ -25,6 +33,19 @@ public class NPCController : MonoBehaviour
         {
             _npcAttack.OnNPCAttack -= AttackAnim;
         }
+        scalePunch.OnDeactive -= ResetNPC;
+    }
+
+    private void ResetNPC(object sender, System.EventArgs e)
+    {
+        _capsuleCollider.enabled = true;
+        transform.SetParent(null);
+        ragdollController.DisableRagdoll();
+        transform.position = _initialPos;
+        transform.rotation = Quaternion.identity;
+
+        npcMovement.enabled = true;
+        npcMovement.SetInitialRotation();
     }
 
     public void AttackAnim(object sender, System.EventArgs e)
@@ -32,17 +53,16 @@ public class NPCController : MonoBehaviour
         anim.SetTrigger("Attack");
     }
 
-    public void ScalePunchDestroy()
+    public void SellNPC()
     {
         scalePunch.DoPunch(true);
     }
 
-    public void ResetPosRot()
+    public void MoveToStackPosRot()
     {
+        npcMovement.enabled = false;
         hipsRB.isKinematic = true;
-        hipsTransform.localPosition = Vector3.zero;
-        Quaternion newRotation = Quaternion.identity;
-        hipsTransform.localRotation = newRotation;
+        ragdollController.ResetHips();
         scalePunch.DoPunch();
     }
 

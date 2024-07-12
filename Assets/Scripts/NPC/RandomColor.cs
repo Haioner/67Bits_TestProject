@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RandomColor : MonoBehaviour
 {
-    [SerializeField] private Renderer gfxRenderer;
+    [SerializeField] private Renderer[] gfxRenderer;
 
     private void Start()
     {
@@ -12,6 +12,9 @@ public class RandomColor : MonoBehaviour
     private void ChangeColor()
     {
         Color newColor = new Color(Random.value, Random.value, Random.value);
-        gfxRenderer.material.color = newColor;
+        foreach (var renderer in gfxRenderer)
+        {
+            renderer.material.color = newColor;
+        }
     }
 }

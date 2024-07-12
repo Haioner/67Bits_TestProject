@@ -26,6 +26,8 @@ public class StackingManager : MonoBehaviour
 
     private void Update()
     {
+        if (!HasStackCount()) return;
+
         Vector3 movementDirection = stackPos.position - _lastPosition;
         _lastPosition = stackPos.position;
 
@@ -49,7 +51,7 @@ public class StackingManager : MonoBehaviour
     {
         if (_npcStackList.Count > 0)
         {
-            _npcStackList[_npcStackList.Count - 1].ScalePunchDestroy();
+            _npcStackList[_npcStackList.Count - 1].SellNPC();
             _npcStackList.RemoveAt(_npcStackList.Count - 1);
             _stackCount--;
             onStackChange?.Invoke(_stackCount, _maxStackCount);
@@ -58,6 +60,7 @@ public class StackingManager : MonoBehaviour
 
     public void ResetStack()
     {
+        StopAllCoroutines();
         foreach (NPCController npc in _npcStackList)
         {
             npc.RemoveParentAndKinematic();
@@ -76,7 +79,7 @@ public class StackingManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.7f);
 
-        if(nPCController != null)
+        if (nPCController != null)
         {
             if (index > 1)
             {
@@ -88,7 +91,7 @@ public class StackingManager : MonoBehaviour
                 nPCController.transform.SetParent(stackPos);
             }
 
-            nPCController.ResetPosRot();
+            nPCController.MoveToStackPosRot();
             nPCController.transform.localPosition = Vector3.up * stackOffset;
         }
 

@@ -12,7 +12,7 @@ public class AttackController : MonoBehaviour
 
     public virtual void Attack(Collider other)
     {
-        CinemachineShake.instance.ShakeCamera(5, 0.1f);
+        CinemachineShake.instance.ShakeCamera(1, 0.1f);
 
         Vector3 direction = (other.transform.position - transform.position).normalized;
         other.GetComponent<RagdollController>().TakePunch(direction);
