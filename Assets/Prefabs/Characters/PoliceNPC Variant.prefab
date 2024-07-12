@@ -410,6 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyTag: Player
+  attackClip: {fileID: 8300000, guid: 521ea65d04f510447875649fe36cf93b, type: 3}
 --- !u!4 &3918106737953358483 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5538730979864118116, guid: ac853013f5743d240ab6db9cf81c15a1, type: 3}

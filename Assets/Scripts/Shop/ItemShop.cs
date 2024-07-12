@@ -9,6 +9,7 @@ public class ItemShop : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private ParticleSystem buyParticle;
+    [SerializeField] private AudioClip buyClip;
 
     [Header("Item")]
     [SerializeField] private float initialPrice;
@@ -57,6 +58,7 @@ public class ItemShop : MonoBehaviour
             _currentBuyCount++;
             buyEvent?.Invoke();
             CheckBought();
+            SoundManager.PlayAudioClipVolume(buyClip, 0.5f);
         } 
     }
 

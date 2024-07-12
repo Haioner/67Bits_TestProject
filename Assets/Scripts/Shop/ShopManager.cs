@@ -7,6 +7,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private Transform colorItemContent;
     [SerializeField] private ShopColorSO colorList;
     [SerializeField] private RectTransform itemSelection;
+    [SerializeField] private AudioClip selectClip;
     public static System.Action<Transform> onSelectColorItem;
 
     public static float Coins { get; private set; }
@@ -65,5 +66,6 @@ public class ShopManager : MonoBehaviour
     {
         itemSelection.SetParent(itemParent);
         itemSelection.anchoredPosition = Vector2.zero;
+        SoundManager.PlayAudioClip(selectClip);
     }
 }

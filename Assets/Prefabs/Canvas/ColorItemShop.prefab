@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priceText: {fileID: 745285789230905393}
   buyParticle: {fileID: 7282411492485833971, guid: c7ccdbb02896ab6429b212bbc230b9ad, type: 3}
+  buyClip: {fileID: 8300000, guid: 29f74d935310b6e419e1b3a3feb4fdf7, type: 3}
   initialPrice: 0
   priceMultiplier: 1.2
   maxBuyCount: 1

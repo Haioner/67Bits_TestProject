@@ -5,6 +5,7 @@ public class PlayerLevel : MonoBehaviour
     [SerializeField] private float maxXP = 100f;
     [SerializeField] private float maxXPMultiplier = 1.225f;
     [SerializeField] private ItemShop levelItemShop;
+    [SerializeField] private AudioClip levelUPClip;
 
     private int _level = 1;
     private float _currentXP = 0f;
@@ -39,6 +40,7 @@ public class PlayerLevel : MonoBehaviour
             _currentXP = remainingXP;
             _stackingManager.AddMaxStack();
             onLevelChanged?.Invoke(_level);
+            SoundManager.PlayAudioClip(levelUPClip);
         }
 
         onXPChanged?.Invoke(_currentXP, maxXP);

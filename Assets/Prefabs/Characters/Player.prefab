@@ -2338,6 +2338,7 @@ MonoBehaviour:
   maxXP: 100
   maxXPMultiplier: 1.225
   levelItemShop: {fileID: 0}
+  levelUPClip: {fileID: 8300000, guid: 16ecc07b28d68ea42962c2494a9e806e, type: 3}
 --- !u!114 &3832930276462751955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2396,6 +2397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyTag: NPC
+  attackClip: {fileID: 8300000, guid: 521ea65d04f510447875649fe36cf93b, type: 3}
   stackingManager: {fileID: 2551798482464694595}
 --- !u!114 &2551798482464694595
 MonoBehaviour:

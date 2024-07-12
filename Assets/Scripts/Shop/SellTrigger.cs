@@ -7,6 +7,7 @@ public class SellTrigger : MonoBehaviour
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private StackingManager _stackingManager;
     [SerializeField] private FloatNumber floatNumberPrefab;
+    [SerializeField] private AudioClip sellClip;
     private bool _sellingCoins = false;
 
     private void OnTriggerEnter(Collider other)
@@ -25,6 +26,7 @@ public class SellTrigger : MonoBehaviour
         while (_stackingManager.HasStackCount())
         {
             _stackingManager.RemoveNPCFromStack();
+            SoundManager.PlayAudioClipPitch(sellClip, Random.Range(0.85f, 1.2f));
             ShopManager.AddCoins(10);
             InstantiateFloatNumber(10 + "<sprite=0>", Color.green);
             yield return new WaitForSeconds(delaySell);
